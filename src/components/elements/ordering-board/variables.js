@@ -1,0 +1,15 @@
+export const chOrderboardTabs = {
+  WAITING: "WAITING",
+  PROCESSING: "PROCESSING",
+  DELIVERY: "DELIVERY",
+  HISTORY: "HISTORY",
+  ORDERBOARD: "ORDERBOARD",
+};
+
+export const orderStatus = {
+  INORDER: "IN-ORDER",
+  INPROCESSING: "IN-PROCESSING",
+  DONE: "DONE",
+  ARCHIVE: "ARCHIVE"
+};
+

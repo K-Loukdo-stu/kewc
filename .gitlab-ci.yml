@@ -1,0 +1,57 @@
+variables:
+  IMAGE_REGISTRY: "$CI_REGISTRY/hoktin/kradass-ewc:latest"
+  
+workflow:
+ rules:
+   - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
+
+stages:
+  - build-image
+  # - apply-k8s
+
+build-image:
+  stage: build-image
+  image: docker:stable
+  services:
+    - docker:20.10.16-dind
+  script:
+    - docker build -t $IMAGE_REGISTRY .
+    - docker login $CI_REGISTRY -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
+    - docker push $IMAGE_REGISTRY
+
+# apply-k8s:
+#   stage: apply-k8s
+#   image:
+#     name: alpine/git:latest
+#     entrypoint: [""]
+#   before_script:
+#     # install doctl
+#     - cd ~
+#     - wget https://github.com/digitalocean/doctl/releases/download/v1.76.0/doctl-1.76.0-linux-amd64.tar.gz
+#     - tar xf ~/doctl-1.76.0-linux-amd64.tar.gz
+#     - mv ~/doctl /usr/local/bin
+
+#     # install kubectl
+#     - apk update
+#     - apk add curl
+#     - curl -LO https://dl.k8s.io/release/v1.24.0/bin/linux/amd64/kubectl
+#     - chmod +x ./kubectl
+#     - mv ./kubectl /usr/local/bin/kubectl
+#     - kubectl version --client
+    
+#     # clone infra repo 
+#     - git --version
+#     - git clone https://oauth2:$CLONE_KEY@gitlab.com/a6136/infra.git
+
+#   script: 
+#     - doctl auth init -t $DO_ACCESS_TOKEN
+#     - doctl kubernetes cluster kubeconfig save $DO_K8S_CONTEXT_NAME
+
+#     # Dependencies
+#     - kubectl apply -f infra/k8s/prod/ingress-srv.yaml
+
+#     # Restart major pod
+#     - kubectl apply -f infra/k8s/clients/kradass-client-depl.yaml
+#     - kubectl rollout restart deployment kradass-client-depl
+  
+  

@@ -72,6 +72,7 @@
 											</MenuButton>
 											<MenuButton title="KTour" href="/dashboard/ktour" />
 											<MenuButton title="KMap" href="/dashboard/kmap" />
+											<MenuButton title="KLoukdo" href="/dashboard/kloukdo" />
 										</div>
 									</div>
 								</div>

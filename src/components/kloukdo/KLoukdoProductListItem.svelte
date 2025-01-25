@@ -3,13 +3,14 @@
     import { createEventDispatcher, onMount } from "svelte";
     const dispatch = createEventDispatcher();
     export let product;
+    export let isAds = false;
   
     let imgLoaded = false;
   </script>
   
   <div class=" flex justify-center items-center pt-2 h-full w-full">
     <div
-      class=" flex flex-col relative w-full h-full bg-white shadow-sm rounded-lg"
+      class=" flex flex-col relative w-full h-full bg-slate-100 shadow-sm rounded-lg"
     >
       <button
         on:click={() => dispatch("select", { product })}
@@ -18,13 +19,16 @@
         <div class=" relative flex-grow w-full p-2 pb-0">
           <div class="  inset-0 rounded-md">
             <div class="p-1 w-full h-full">
+              {#if product.photos[0]}
               <img
                 class:hidden={!imgLoaded}
-                class=" w-full h-48 rounded-md object-cover"
-                src={product.photos[0].thumbnail.url}
+                class=" w-full h-40 rounded-md object-cover"
+                src={product.photos[0].url}
                 alt=""
                 on:load={() => (imgLoaded = true)}
               />
+              {/if}
+              
             </div>
           </div>
         </div>
@@ -44,8 +48,13 @@
                   </div>
                 </div>
               {:else}
-                <div class="font-bold text-2xl text-gray-600 py-1">
-                  {product?.price?.price ?? ""}$
+                <div class="flex justify-between w-full align-bottom">
+                    <div class="font-bold text-2xl text-gray-600 py-1">
+                      {product?.price?.price ?? ""}$
+                    </div>
+                    {#if isAds===true}
+                      <div>ads</div>
+                    {/if}
                 </div>
               {/if}
             </div>
@@ -63,14 +72,4 @@
       </div> -->
     </div>
   </div>
-  
-  <style>
-    .two-line-text {
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-  </style>
   

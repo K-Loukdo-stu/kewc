@@ -1,4 +1,3 @@
-import { APIs } from "$lib/statics";
 import { restEndpointFetch } from "../utils";
 
 export const uploadImage = {

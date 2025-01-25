@@ -1,8 +1,13 @@
 import { gql } from '@apollo/client/core';
 
 export const GET_KLOUKDO_PRODUCT_QUERY = gql`
-query getAllKLoukdoProducts($page: Float!){
-    getAllKLoukdoProducts(page: $page){
+query getAllKLoukdoProducts($page: Float!, $limit: Float){
+    getAllKLoukdoProducts(
+        params: {
+            page: $page,
+            limit: $limit
+        }
+    ){
         id
         name
         price { price }
@@ -10,6 +15,70 @@ query getAllKLoukdoProducts($page: Float!){
         subCategory{ name }
         user {email username}
         photos
+        createdAt
+    }
+}
+`;
+
+export const SEARCH_KLOUKDO_PRODUCT = gql`
+query searchKLoukdoProductByName ($name: String!) {
+  searchKLoukdoProductByName
+  (
+    name: $name
+  )
+  {
+      id, 
+      name, 
+      price {id, price, currency, discountPrice, hasDiscount,isMain},
+      photos
+      category{id, name}
+      subCategory{id, name}
+      user {username}
+      createdAt
+      updatedAt
+    }
+}
+`;
+
+export const GET_KLOUKDO_PRODUCT_BY_CATEGORY_QUERY = gql`
+query findKLoukdoProductByCategory ( $category: String!, $limit: Float ){
+  findKLoukdoProductByCategory(
+    params: {
+        category: $category,
+        limit: $limit
+    }
+  )
+  {
+      id, 
+      name, 
+      price {id, price, currency, discountPrice, hasDiscount,isMain},
+      photos
+      category{id, name}
+      subCategory{id, name}
+      user {username}
+      createdAt
+      updatedAt
+    }
+}
+`;
+
+export const GET_KLOUKDO_PRODUCT_BY_SUB_CATEGORY_QUERY = gql`
+query findKLoukdoProductBySubCategory ( $subCategory: String!, $limit: Float ){
+    findKLoukdoProductBySubCategory (params: {
+            subCategory: $subCategory,
+            limit: $limit
+        }
+    )
+    {
+        id, 
+        name, 
+        price {id, price, currency, discountPrice, hasDiscount,isMain},
+        photos
+        category{id, name}
+        subCategory{id, name}
+        user {username}
+        createdAt
+        updatedAt
     }
 }
 `;
@@ -23,7 +92,7 @@ mutation createKLoukdoProduct ($name: String!, $category: String!, $subCategory:
     price: $price,
     discountPrice: $discountPrice,
     currency: $currency,
-    hasDiscount: $hasDiscount,
+    hasDiscount: $hasDiscount, 
     photos: $photos
   }){
     id

@@ -1,4 +1,4 @@
-<div class="bg-white px-5 pb-5">
+<div class="bg-slate-100 px-5 pb-5">
     <div class="text-center text-xl font-bold">
         K-Loukdo
     </div>

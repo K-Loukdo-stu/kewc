@@ -9,8 +9,9 @@
   </script>
   
   <div class=" flex justify-center items-center pt-2 h-full w-full">
-    <div
-      class=" flex flex-col relative w-full h-full bg-slate-100 shadow-sm rounded-lg"
+    <a
+      class=" flex flex-col relative w-full h-full bg-white shadow-sm rounded-lg"
+      href="/web-content/kloukdo/product/{product.id}"
     >
       <button
         on:click={() => dispatch("select", { product })}
@@ -40,16 +41,16 @@
             <div class=" flex-grow flex">
               {#if product?.price?.hasDiscount}
                 <div class=" w-full">
-                  <div class=" text-sm line-through text-gray-500">
+                  <div class=" text-sm line-through text-red-500">
                     {product.price.price}$
                   </div>
-                  <div class="font-bold text-2xl text-gray-600">
+                  <div class="font-bold text-2xl text-red-500">
                     {product.price.discountPrice}$
                   </div>
                 </div>
               {:else}
                 <div class="flex justify-between w-full align-bottom">
-                    <div class="font-bold text-2xl text-gray-600 py-1">
+                    <div class="font-bold text-2xl text-red-500 py-1">
                       {product?.price?.price ?? ""}$
                     </div>
                     {#if isAds===true}
@@ -70,6 +71,6 @@
           <CartAdd size={18} />
         </button>
       </div> -->
-    </div>
+    </a>
   </div>
   

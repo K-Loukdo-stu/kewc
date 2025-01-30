@@ -10,23 +10,23 @@
         />
         <LinkButton
             name="Category"
-            url={`/web-content/kchannel/category/1`}
+            url={`/web-content/kloukdo/category`}
+        />
+        <LinkButton
+            name="Sub Category"
+            url={`/web-content/kloukdo/sub-category`}
+        />
+        <LinkButton
+            name="Product"
+            url={`/web-content/kloukdo/product/[pid]`}
+        />
+        <!-- <LinkButton
+            name="d"
+            url={`/web-content/kloukdo/home`}
         />
         <LinkButton
             name="d"
-            url={`/web-content/kchannel/home`}
-        />
-        <LinkButton
-            name="d"
-            url={`/web-content/kchannel/home`}
-        />
-        <LinkButton
-            name="d"
-            url={`/web-content/kchannel/home`}
-        />
-        <LinkButton
-            name="d"
-            url={`/web-content/kchannel/home`}
-        />
+            url={`/web-content/kloukdo/home`}
+        /> -->
     </div>
 </div>

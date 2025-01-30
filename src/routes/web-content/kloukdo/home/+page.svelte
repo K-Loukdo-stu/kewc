@@ -5,8 +5,7 @@
   import { getKLoukdoCategories } from "$providers/actions/kloukdo/kloukdocategory";
   import { getAllKLoukdoProducts } from "$providers/actions/kloukdo/kloukdoproduct";
   import { getRandomKLoukdoPromotions } from "$providers/actions/kloukdo/kloukdopromotion";
-  import { onMount } from "svelte";
-  import CorouselSlide from "$components/kloukdo/CorouselSlide.svelte";
+  import { onDestroy, onMount } from "svelte";
   import ProductDisplayOption from "$components/kloukdo/ProductDisplayOption.svelte";
   import KLoukdoProductListView from "$components/kloukdo/KLoukdoProductListView.svelte";
   import KLoukdoFooter from "$components/kloukdo/KLoukdoFooter.svelte";
@@ -19,7 +18,7 @@
     let totalAds;
     const intervalTime = 5000;
 
-    let display = 2; //1. window display 2. list display
+    let display = 1; //1. window display 2. list display
 
     let currentPage = 0;
     let currentLimit = 15;
@@ -62,7 +61,20 @@
         currentAds = (currentAds + 1) % Ads.length;
     }, intervalTime);
 
-	// When Operating start run it first
+    let y = 0;
+    let newY = [0, 0];
+    $: oldY = newY[1];
+
+    function updateY(event){
+        y = event.target.scrollTop
+        newY.push(y);
+        if(newY.length > 5) {
+            newY.shift();
+        }
+        newY=newY;
+    }
+
+
 	onMount(async () => {
 		await loadCategories();
         await loadAds();
@@ -70,28 +82,33 @@
         await loadProduct();
 
         totalAds = Ads.length;
+
 	});
+
+
+
+
+
 </script>
 
-<div class="flex flex-col mx-auto w-96 border-blue-400 border overflow-y-scroll">
+
+<div class="flex flex-col mx-auto w-96 border-blue-400 border relative overflow-y-scroll"
+    on:scroll={updateY}
+>
     <KLoukdoHeader/>
     
     <div class="">
         <div class="m-auto relative w-full">
             {#each Ads as ad, i}
                 {#if i === currentAds}
-                    <div class=""
-                        >
+                    <div class="" >
                         <img
-                            class="w-full h-44 bg-slate"
+                            class="w-full h-44 object-cover"
                             src="{ad.image.url}"
                             alt="{ad.name}" />
                     </div>
                 {/if}
             {/each}
-            <!-- <CorouselSlide
-                items={Ads};
-            /> -->
 
             <div class="absolute bottom-[3px] right-2/4 translate-x-[50%]">
                 <div class="flex gap-2">
@@ -112,20 +129,22 @@
     
         </div>
         <div >
-            <div class="grid grid-cols-4 gap-5 my-5">
+            <div class="grid grid-cols-4 gap-5 mt-5 p-3 grid-">
                 {#each Categories as category }
-                    <div class="m-auto bg-slate-200 p-2 rounded-md">
+                    <div class="m-auto bg-white p-2 rounded-md text-center h-20">
                         {#if category.icon}
                             <a href="/web-content/kloukdo/category/{category.id}">
-                                <img src="{category.icon}" alt="" class="w-10 h-10">
+                                <img src="{category.icon}" alt="" class="w-9 h-9 m-auto">
                             </a>
+                            <p class=" text-sm">{category.name}</p>
+                            
                         {:else}
                         <a href="/web-content/kloukdo/category/{category.id}">
                             <img
                             class=" w-10 h-10 m-auto"
                             src="https://cdn.worldvectorlogo.com/logos/standout-stickers-1.svg"
                             alt=""
-                        />
+                        /><p class=" text-sm">{category.name}</p>
                         </a>
                         {/if}
                     </div>
@@ -134,15 +153,16 @@
             </div>
             
         </div>
-        <div class=" bg-white p-2">
+        <div class=" p-2">
             <ProductDisplayOption
                 on:window={() => {display = 1}}
                 on:list={() => {display = 2}}
+                display={display}
             />
 
             {#if display == 1}
                 <div class="">
-                    <div class="flex gap-5">
+                    <div class="grid gap-5 grid-cols-2">
                         {#each Promotions as promo }
                             <KLoukdoProductListItem
                                 product={promo.product}
@@ -195,7 +215,19 @@
             {/if}
             
         </div>
+          
         
     </div>
+
+    {#if oldY >= y }
+        <a class="fixed bottom-5 right-1/2 translate-x-[50%] rounded-full bg-blue-400 p-3 text-white"
+            href="/web-content/kloukdo/product/create"
+        >
+            <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5H13V11H19V13H13V19H11V13H5V11H11Z"></path></svg>
+        </a>
+    {/if}
+    
+
+    
     <KLoukdoFooter/>
 </div>

@@ -1,5 +1,5 @@
 import { APIs } from "$lib/statics/apis";
-import { CREATE_KLOUKDO_PRODUCT_MUTATION, DELETE_KLOUKDO_PRODUCT_MUTATION, GET_KLOUKDO_PRODUCT_BY_CATEGORY_QUERY, GET_KLOUKDO_PRODUCT_BY_SUB_CATEGORY_QUERY, GET_KLOUKDO_PRODUCT_QUERY } from "$providers/queries/kloukdo/kloukdoproduct";
+import { CREATE_KLOUKDO_PRODUCT_MUTATION, DELETE_KLOUKDO_PRODUCT_MUTATION, GET_KLOUKDO_PRODUCT_BY_CATEGORY_QUERY, GET_KLOUKDO_PRODUCT_BY_ID_QUERY, GET_KLOUKDO_PRODUCT_BY_SUB_CATEGORY_QUERY, GET_KLOUKDO_PRODUCT_QUERY } from "$providers/queries/kloukdo/kloukdoproduct";
 import { endpointFetch } from "../utils";
 
 export const getAllKLoukdoProducts = {
@@ -44,9 +44,24 @@ export const getKLoukdoProductsBySubCategory = {
     }
 }
 
+export const getKLoukdoProductById = {
+    load: async ({ id }) => {
+        const res = await endpointFetch({
+            query: GET_KLOUKDO_PRODUCT_BY_ID_QUERY,
+            variables: { id }
+        }, APIs.KLOUKDO);
+        if (res?.success == true) {
+            res['data'] = res['data']['getKLoukdoProduct'];
+            return res;
+        }
+        throw res;
+    }
+}
+
 export const createKLoukdoProduct = {
     load: async ({ name, category, subCategory, price, discountPrice, currency, hasDiscount,  photos }) => {
-        console.log(typeof(hasDiscount));
+        console.log("===============================================");
+        console.log(photos);
         const res = await endpointFetch({
             query: CREATE_KLOUKDO_PRODUCT_MUTATION,
             variables: {name, category, subCategory, price, discountPrice, currency, hasDiscount, photos}

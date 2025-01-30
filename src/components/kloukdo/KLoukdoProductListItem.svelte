@@ -12,6 +12,7 @@
     <a
       class=" flex flex-col relative w-full h-full bg-white shadow-sm rounded-lg"
       href="/web-content/kloukdo/product/{product.id}"
+      data-sveltekit-reload
     >
       <button
         on:click={() => dispatch("select", { product })}

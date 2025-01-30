@@ -35,7 +35,6 @@ query searchKLoukdoProductByName ($name: String!) {
       subCategory{id, name}
       user {username}
       createdAt
-      updatedAt
     }
 }
 `;
@@ -57,7 +56,6 @@ query findKLoukdoProductByCategory ( $category: String!, $limit: Float ){
       subCategory{id, name}
       user {username}
       createdAt
-      updatedAt
     }
 }
 `;
@@ -77,6 +75,26 @@ query findKLoukdoProductBySubCategory ( $subCategory: String!, $limit: Float ){
         category{id, name}
         subCategory{id, name}
         user {username}
+        createdAt
+    }
+}
+`;
+
+export const GET_KLOUKDO_PRODUCT_BY_ID_QUERY =gql`
+query getKLoukdoProduct ($id: String!){
+    getKLoukdoProduct (
+        params:{
+            id: $id
+        }
+    )
+    {
+        id, 
+        name, 
+        price {id, price, currency, discountPrice, hasDiscount,isMain},
+        photos
+        category{id, name}
+        subCategory{id, name}
+        user {username firstName lastName phone}
         createdAt
         updatedAt
     }

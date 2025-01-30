@@ -26,6 +26,7 @@ query getKLoukdoPromotionRandom {
                 price
             }
             photos
+            createdAt
         }
         endDate
     }

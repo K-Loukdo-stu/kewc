@@ -8,15 +8,24 @@ query getAllKLoukdoProducts($page: Float!, $limit: Float){
             limit: $limit
         }
     ){
+    product{
         id
         name
-        price { price }
-        category{ name }
+        price {
+            id
+            price
+        }
+        category{
+            name
+        }
         subCategory{ name }
-        user {email username}
+        user {username phone}
         photos
         createdAt
     }
+    total
+    page
+  }
 }
 `;
 

@@ -38,10 +38,6 @@ export const restEndpointFetch = async ({ method, url, body = {}, headers = {} }
   });
 
   const apiRes = await res.json();
-  // console.log("level 1:" + res)
-  // console.log("level 1:" + apiRes)
-  // console.log("level 1:" + apiRes.body)
-  // Return body of successful request
   if (apiRes?.success !== false) {
     return apiRes;
   }

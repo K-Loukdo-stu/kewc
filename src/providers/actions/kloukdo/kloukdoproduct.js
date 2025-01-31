@@ -60,8 +60,6 @@ export const getKLoukdoProductById = {
 
 export const createKLoukdoProduct = {
     load: async ({ name, category, subCategory, price, discountPrice, currency, hasDiscount,  photos }) => {
-        console.log("===============================================");
-        console.log(photos);
         const res = await endpointFetch({
             query: CREATE_KLOUKDO_PRODUCT_MUTATION,
             variables: {name, category, subCategory, price, discountPrice, currency, hasDiscount, photos}

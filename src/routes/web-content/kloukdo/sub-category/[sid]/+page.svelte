@@ -11,6 +11,9 @@
     import { page } from '$app/stores';
 
     import { onMount } from "svelte";
+  import KLoukdoProductListItem from "$components/kloukdo/KLoukdoProductListItem.svelte";
+  import KLoukdoProductListView from "$components/kloukdo/KLoukdoProductListView.svelte";
+  import ProductDisplayOption from "$components/kloukdo/ProductDisplayOption.svelte";
 
     let categoryId = $page.params.sid;
     let categoryName = "";
@@ -30,6 +33,7 @@
     const intervalTime = 5000;
 
 
+    let display = 1;
 
     let products = [];
   
@@ -92,7 +96,7 @@
 
     const loadProductBySubCategory = async () => {
       console.log(categoryId)
-        const res = await getKLoukdoProductsBySubCategory.load({subCategory:categoryId , limit:2});
+        const res = await getKLoukdoProductsBySubCategory.load({subCategory:categoryId , limit:14});
         SubProducts = res.data;
         console.log({SubProducts})
     }
@@ -184,7 +188,7 @@ div>
   
   
     <!-- Sort & View Toggle -->
-    <div class="flex justify-between items-center p-2">
+    <!-- <div class="flex justify-between items-center p-2">
       <div class="flex gap-2">
         <select bind:value={sortBy} class="border p-2 rounded">
           <option value="default">Sort</option>
@@ -198,10 +202,76 @@ div>
       <button on:click={toggleView} class="p-2 border rounded">
         {gridView ? "🔲" : "📄"}
       </button>
-    </div>
+    </div> -->
+
+    
+    <div class=" p-2">
+      <ProductDisplayOption
+          on:window={() => {display = 1}}
+          on:list={() => {display = 2}}
+          display={display}
+      />
+
+      {#if display == 1}
+          <!-- <div>Promotion</div>
+          <div class="mb-3">
+              <div class="grid gap-5 grid-cols-2">
+                  {#each Promotions as promo }
+                      <KLoukdoProductListItem
+                          product={promo.product}
+                          on:select={(evt) => {
+                              let product = evt.detail;
+                          }}
+                      />
+                  {/each}
+              </div>
+          </div>
+          <div>Trending</div> -->
+          <div class="">
+              <div class="grid gap-5 grid-cols-2">
+                  {#each SubProducts as pro }
+                      <KLoukdoProductListItem
+                          product={pro}
+                          on:select={(evt) => {
+                              let product = evt.detail;
+                          }}
+                      />
+                  {/each}
+              </div>
+          </div>
+      {:else if display == 2}
+      <!-- <div>Promotion</div>
+          <div class="mb-3">
+              <div class="flex flex-col gap-5">
+                  {#each Promotions as promo }
+                      <KLoukdoProductListView
+                          product={promo.product}
+                          on:select={(evt) => {
+                              let product = evt.detail;
+                          }}
+                      />
+                  {/each}
+              </div>
+          </div>
+          <div>Trending</div> -->
+          <div class="">
+              <div class="flex flex-col gap-5">
+                  {#each SubProducts as pro }
+                      <KLoukdoProductListView
+                          product={pro}
+                          on:select={(evt) => {
+                              let product = evt.detail;
+                          }}
+                      />
+                  {/each}
+              </div>
+          </div>
+      {/if}
+      
+  </div>
   
     <!-- Product Grid -->
-    <div class={gridView ? "grid grid-cols-2 gap-3 p-2" : "flex flex-col gap-3 p-2"}>
+    <!-- <div class={gridView ? "grid grid-cols-2 gap-3 p-2" : "flex flex-col gap-3 p-2"}>
       {#each SubProducts as subProducts}
         <div class="border p-2 rounded-md">
           <img src={subProducts.photos} alt={subProducts.name} class="w-full h-40 object-cover rounded-md" />
@@ -212,7 +282,7 @@ div>
           {/if}
         </div>
       {/each}
-    </div>
+    </div> -->
 
   
     <KLoukdoFooter/>

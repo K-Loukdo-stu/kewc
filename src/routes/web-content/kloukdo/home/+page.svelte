@@ -9,6 +9,8 @@
   import ProductDisplayOption from "$components/kloukdo/ProductDisplayOption.svelte";
   import KLoukdoProductListView from "$components/kloukdo/KLoukdoProductListView.svelte";
   import KLoukdoFooter from "$components/kloukdo/KLoukdoFooter.svelte";
+  import SearchInput from "$components/materials/dashboard/channel/SearchInput.svelte";
+  import { goto } from "$app/navigation";
 
     let Categories = [];
     let Ads = [];
@@ -91,6 +93,13 @@
 	});
 
 
+    // var input = document.getElementById("myInput");
+    // input.addEventListener("keypress", function(event) {
+    //     if (event.key === "Enter") {
+    //         event.preventDefault();
+    //         goto("/web-content/kloukdo/product/search")
+    //     }
+    // })
 
 
 
@@ -103,7 +112,23 @@
     <KLoukdoHeader/>
     
     <div class="">
-        
+        <!-- <div>
+            <div class=" w-full">
+                <input
+                id="myInput"
+                  class="block p-2 px-4 w-full text-gray-900 rounded border border-gray-300 dark:bg-white dark:placeholder-gray-400 dark:text-gray-700 peer outline-none focus:outline-none focus:ring-0"
+                  placeholder="Search Products"
+                  type="search"
+                  on:input={() => {
+                    // if (T) clearTimeout(T);
+                    // T = setTimeout(() => {
+                    //   dispatch("change", { value });
+                    // }, 300);
+                  }}
+                />
+            </div>
+            <SearchInput />
+        </div> -->
         <div class="m-auto relative w-full">
             {#each Ads as ad, i}
                 {#if i === currentAds}

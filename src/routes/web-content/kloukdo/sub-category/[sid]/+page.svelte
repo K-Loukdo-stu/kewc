@@ -3,7 +3,7 @@
     import SubMenuButton from "$components/materials/side-menu/SubMenuButton.svelte";
     import { getKLoukdoCategories } from "$providers/actions/kloukdo/kloukdocategory";
     import {getKLoukdoSubCategoriesByCategory , getKLoukdoSubCategories} from "$providers/actions/kloukdo/kloukdosubcategory";
-    import {getKLoukdoProductsByCategory } from "$providers/actions/kloukdo/kloukdoproduct"
+    import {getKLoukdoProductsByCategory , getKLoukdoProductsBySubCategory} from "$providers/actions/kloukdo/kloukdoproduct"
     import { getKLoukdoAdsImage } from "$providers/actions/kloukdo/kloukdoadsimage";
     import KLoukdoFooter from "$components/kloukdo/KLoukdoFooter.svelte";
 
@@ -12,13 +12,14 @@
 
     import { onMount } from "svelte";
 
-    let categoryId = $page.params.cid;
+    let categoryId = $page.params.sid;
     let categoryName = "";
     
   
     let Categories = [];
     let SubCategories = [];
     let Ads = [];
+    let SubProducts = []
 
     let selectedBrand = "all";
     let sortBy = "default";
@@ -32,19 +33,19 @@
 
     let products = [];
   
-    const loadCategories = async () => {
-      try {
-        const res = await getKLoukdoCategories.load();
-        const Contegories = res.data
-        const category = Contegories.find(cat => cat.id === categoryId);
-        console.log(category)
-          if (category) {
-            categoryName = category.name;
-    }
-      } catch (err) {
-        console.error(err);
-      }
-    };
+    // const loadCategories = async () => {
+    //   try {
+    //     const res = await getKLoukdoCategories.load();
+    //     const Contegories = res.data
+    //     const category = Contegories.find(cat => cat.id === categoryId);
+    //     console.log(category)
+    //       if (category) {
+    //         categoryName = category.name;
+    // }
+    //   } catch (err) {
+    //     console.error(err);
+    //   }
+    // };
 
     const loadAds = async () => {
         try {
@@ -76,23 +77,31 @@
     }
 
 
-    const loadSubCategories = async () => {
-        const res = await getKLoukdoSubCategoriesByCategory.load({category:categoryId});
-        SubCategories = res.data;
-        console.log(SubCategories)
-    }
+    // const loadSubCategories = async () => {
+    //     const res = await getKLoukdoSubCategoriesByCategory.load({category:categoryId});
+    //     SubCategories = res.data;
+    //     console.log(SubCategories)
+    // }
 
 
-    const loadProductByCategory = async () => {
-        const res = await getKLoukdoProductsByCategory.load({category:categoryId , limit:2});
-        products = res.data;
-        console.log({products})
+    // const loadProductByCategory = async () => {
+    //     const res = await getKLoukdoProductsByCategory.load({category:categoryId , limit:2});
+    //     products = res.data;
+    //     console.log({products})
+    // }
+
+    const loadProductBySubCategory = async () => {
+      console.log(categoryId)
+        const res = await getKLoukdoProductsBySubCategory.load({subCategory:categoryId , limit:2});
+        SubProducts = res.data;
+        console.log({SubProducts})
     }
   
     onMount(async () => {
-      await loadCategories();
-      await loadSubCategories();
-      await loadProductByCategory();
+      // await loadCategories();
+      // await loadSubCategories();
+      // await loadProductByCategory();
+      await loadProductBySubCategory()
       await loadAds();
 
       totalAds = Ads.length;
@@ -149,18 +158,18 @@ div>
       <input type="text" placeholder="ស្វែងរកទីនេះ" class="flex-grow border p-2 rounded" />
     </div>
   
-    <!-- Filter by Brand -->
+    <!-- Filter by Brand
         <div class="flex gap-3 p-2 overflow-x-auto">
-            {#each SubCategories as subCategory}
+            {#each SubProducts as subCategory}
               <div class="m-auto bg-white p-2 rounded-md text-center h-20">
                 {#if subCategory.icon}
-                    <a href="/web-content/kloukdo/sub-category/{subCategory.id}">
+                    <a href="/web-content/kloukdo/sub-category">
                         <img src="{subCategory.icon}" alt="" class="w-9 h-9 m-auto">
                     </a>
-                    <p class=" text-sm">{subCategory.name} </p>
+                    <p class=" text-sm">{subCategory.name}</p>
                     
                 {:else}
-                <a href="/web-content/kloukdo/sub-category/{subCategory.id}">
+                <a href="/web-content/kloukdo/sub-category">
                     <img
                     class=" w-10 h-10 m-auto"
                     src="https://cdn.worldvectorlogo.com/logos/standout-stickers-1.svg"
@@ -171,7 +180,7 @@ div>
             </div>
 
             {/each}
-        </div>
+        </div> -->
   
   
     <!-- Sort & View Toggle -->
@@ -193,18 +202,19 @@ div>
   
     <!-- Product Grid -->
     <div class={gridView ? "grid grid-cols-2 gap-3 p-2" : "flex flex-col gap-3 p-2"}>
-      {#each products as product}
+      {#each SubProducts as subProducts}
         <div class="border p-2 rounded-md">
-          <img src={product.photos} alt={product.name} class="w-full h-40 object-cover rounded-md" />
-          <h2 class="text-sm mt-2">{product.name}</h2>
-          <p class="font-bold">{product.price.price}  </p>
-          {#if product.isAd}
-            <p class="text-xs text-gray-500">Ads</p>
+          <img src={subProducts.photos} alt={subProducts.name} class="w-full h-40 object-cover rounded-md" />
+          <h2 class="text-sm mt-2">{subProducts.name}</h2> 
+          <p class="font-bold">{subProducts.price.price}  </p>
+           {#if subProducts.isAd}
+             <p class="text-xs text-gray-500">Ads</p>
           {/if}
         </div>
       {/each}
     </div>
-    
+
+  
     <KLoukdoFooter/>
 
   </div>

@@ -98,6 +98,7 @@
     <KLoukdoHeader/>
     
     <div class="">
+        
         <div class="m-auto relative w-full">
             {#each Ads as ad, i}
                 {#if i === currentAds}
@@ -128,6 +129,8 @@
             </div>
     
         </div>
+
+        
         <div >
             <div class="grid grid-cols-4 gap-5 mt-5 p-3 grid-">
                 {#each Categories as category }

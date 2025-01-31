@@ -157,7 +157,7 @@
             </div>
             <div class="flex flex-col gap-1">
                 <p class="text-xl font-bold">Description</p>
-                <p>id: {product.id}</p>
+                <!-- <p>id: {product.id}</p> -->
                 {#if product.category}
                     <p>Category: {product.category.name}</p>
                 {/if}

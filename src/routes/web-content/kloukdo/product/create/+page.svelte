@@ -4,13 +4,14 @@
   import KLoukdoFooter from "$components/kloukdo/KLoukdoFooter.svelte";
   import KLoukdoHeader from "$components/kloukdo/KLoukdoHeader.svelte";
   import SelectOption from "$components/kloukdo/SelectOption.svelte";
+  import Loading from "$components/modals/wide/Loading/Loading.svelte";
   import { getKLoukdoCategories } from "$providers/actions/kloukdo/kloukdocategory";
   import { uploadImage } from "$providers/actions/kloukdo/kloukdoimage";
   import { createKLoukdoProduct } from "$providers/actions/kloukdo/kloukdoproduct";
   import { getKLoukdoSubCategoriesByCategory } from "$providers/actions/kloukdo/kloukdosubcategory";
   import { createEventDispatcher, onMount } from "svelte";
 
-const dispatch = createEventDispatcher();
+    const dispatch = createEventDispatcher();
     let name;
     let price;
     let discountPrice = 0;
@@ -39,6 +40,7 @@ const dispatch = createEventDispatcher();
 
     const createdService = async (evt) => {
         evt.preventDefault();
+        loading = true;
 
         let allUploadedImage = [];
 
@@ -79,7 +81,8 @@ const dispatch = createEventDispatcher();
 
         if (res.success) {
             disabledCreate = true;
-            goto("/web-content/kloukdo/home")
+            loading = false;
+            goto("/web-content/kloukdo/home");
         }
     };
 
@@ -146,11 +149,6 @@ const dispatch = createEventDispatcher();
         console.log({allImage})
     }
 
-    var loadFile = function(event, index) {
-        var image = document.getElementById(`output${index}`);
-        image.src = URL.createObjectURL(event.target.files[0]);
-    };
-
     const loadCategories = async () => {
 		try {
 			const res = await getKLoukdoCategories.load();
@@ -170,6 +168,8 @@ const dispatch = createEventDispatcher();
     onMount(async () => {
         await loadCategories();
     })
+
+    let loading = false;
 </script>
 
 
@@ -177,6 +177,12 @@ const dispatch = createEventDispatcher();
     <KLoukdoHeader
         goBack={true}
     />
+
+    {#if loading}
+        <div class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+            <Loading />
+        </div>
+    {/if}
                 
     <div class="py-6 px-2 lg:px-8 w-full">
         <form
@@ -188,7 +194,7 @@ const dispatch = createEventDispatcher();
                 Create A Product
             </div>
             <div class="w-full">
-                <div class="mb-2">
+                <div class="mb-2 relative">
                     <div class="block mb-2 text-sm font-medium text-gray-900">Photos</div>
                     <label for="photos">
                         <div class="flex justify-center items-center h-40 rounded-lg mb-2 text-sm font-medium text-gray-900 w-full border border-blue-400">
@@ -210,7 +216,7 @@ const dispatch = createEventDispatcher();
                         type="file"
                         name="photos"
                         bind:value={photos}
-                        class="hidden border text-center text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 bg-gray-600 border-gray-500 placeholder-gray-400"
+                        class="border text-center text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full h-0 bg-gray-600 border-gray-500 placeholder-gray-400 absolute bottom-0 opacity-0"
                         placeholder="Photos"
                         on:change={(event) => {imageUploaded(event, 1)}}
                     />

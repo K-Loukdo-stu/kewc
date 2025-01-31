@@ -15,13 +15,14 @@
     let Promotions = [];
     let Products = [];
     let currentAds = 0;
+    let Page;
     let totalAds;
     const intervalTime = 5000;
 
     let display = 1; //1. window display 2. list display
 
-    let currentPage = 0;
-    let currentLimit = 15;
+    let currentPage = 1;
+    let currentLimit = 14;
     
     const loadCategories = async () => {
 		try {
@@ -49,8 +50,12 @@
     }
     const loadProduct = async () => {
         try {
-            const res = await getAllKLoukdoProducts.load({page:currentPage, limit:currentLimit});
-            Products = res.data;
+            const res = await getAllKLoukdoProducts.load({page:currentPage-1, limit:currentLimit});
+            // Products = res.data.product;
+            // Products.push.apply(Products, res.data.product);
+            Products = [...Products, ...res.data.product];
+            // console.log(Products)
+            Page = res.data.page;
         } catch (error) {
             
         }
@@ -129,24 +134,23 @@
     
         </div>
         <div >
-            <div class="grid grid-cols-4 gap-5 mt-5 p-3 grid-">
+            <div class="grid grid-cols-3 gap-5 mt-5 p-3">
                 {#each Categories as category }
-                    <div class="m-auto bg-white p-2 rounded-md text-center h-20">
+                    <div class="m-auto bg-white p-2 rounded-md text-center h-24 w-20 flex flex-col">
                         {#if category.icon}
                             <a href="/web-content/kloukdo/category/{category.id}">
                                 <img src="{category.icon}" alt="" class="w-9 h-9 m-auto">
                             </a>
-                            <p class=" text-sm">{category.name}</p>
-                            
                         {:else}
-                        <a href="/web-content/kloukdo/category/{category.id}">
-                            <img
-                            class=" w-10 h-10 m-auto"
-                            src="https://cdn.worldvectorlogo.com/logos/standout-stickers-1.svg"
-                            alt=""
-                        /><p class=" text-sm">{category.name}</p>
-                        </a>
+                            <a href="/web-content/kloukdo/category/{category.id}">
+                                <img
+                                class=" w-9 h-9 m-auto"
+                                src="https://cdn.worldvectorlogo.com/logos/standout-stickers-1.svg"
+                                alt=""
+                                />
+                            </a>
                         {/if}
+                        <p class=" text-sm">{category.name}</p>
                     </div>
                 {/each}
         
@@ -161,12 +165,12 @@
             />
 
             {#if display == 1}
-                <div class="">
+                <div>Promotion</div>
+                <div class="mb-3">
                     <div class="grid gap-5 grid-cols-2">
                         {#each Promotions as promo }
                             <KLoukdoProductListItem
                                 product={promo.product}
-                                isAds={true}
                                 on:select={(evt) => {
                                     let product = evt.detail;
                                 }}
@@ -174,7 +178,8 @@
                         {/each}
                     </div>
                 </div>
-                <div class="mt-5">
+                <div>Trending</div>
+                <div class="">
                     <div class="grid gap-5 grid-cols-2">
                         {#each Products as pro }
                             <KLoukdoProductListItem
@@ -187,12 +192,12 @@
                     </div>
                 </div>
             {:else if display == 2}
-                <div class="">
+            <div>Promotion</div>
+                <div class="mb-3">
                     <div class="flex flex-col gap-5">
                         {#each Promotions as promo }
                             <KLoukdoProductListView
                                 product={promo.product}
-                                isAds={true}
                                 on:select={(evt) => {
                                     let product = evt.detail;
                                 }}
@@ -200,7 +205,8 @@
                         {/each}
                     </div>
                 </div>
-                <div class="mt-5">
+                <div>Trending</div>
+                <div class="">
                     <div class="flex flex-col gap-5">
                         {#each Products as pro }
                             <KLoukdoProductListView
@@ -227,7 +233,18 @@
         </a>
     {/if}
     
-
+    {#if currentPage < Page}
+        <div class="m-auto my-5 bg-blue-400 text-white p-2 py-1 rounded-md flex justify-center items-center">
+            <button
+                on:click={async () => {
+                    currentPage +=1;
+                    await loadProduct();
+                }}
+            >
+                load more
+            </button>
+        </div>
+    {/if}
     
     <KLoukdoFooter/>
 </div>

@@ -3,7 +3,7 @@
     import { createEventDispatcher, onMount } from "svelte";
     const dispatch = createEventDispatcher();
     export let product;
-    export let isAds = false;
+    // export let isAds = false;
   
     let imgLoaded = false;
   </script>
@@ -54,9 +54,9 @@
                     <div class="font-bold text-2xl text-red-500 py-1">
                       {product?.price?.price ?? ""}$
                     </div>
-                    {#if isAds===true}
+                    <!-- {#if isAds===true}
                       <div>ads</div>
-                    {/if}
+                    {/if} -->
                 </div>
               {/if}
             </div>
